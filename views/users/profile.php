@@ -15,7 +15,7 @@ $user = $_SESSION['user'];
     <img src="/uploads/<?= htmlspecialchars($user['avatar']) ?>" width="150" alt="Avatar"><br><br>
 <?php endif; ?>
 
-<form action="../../actions/users/update.php" method="POST" enctype="multipart/form-data">
+<form id="update" enctype="multipart/form-data">
     <label>Name:</label><br>
     <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>"><br><br>
 
@@ -37,3 +37,7 @@ $user = $_SESSION['user'];
 </form>
 
 <a href="../../actions/users/profile.php">Log out</a>
+
+<div id="statusMessage" style="margin-top: 10px;"></div>
+<script src="../../js/update.js"></script>
+<div id="errorMessage" style="color: red; margin-top: 10px;"></div>

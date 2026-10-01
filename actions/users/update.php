@@ -1,9 +1,12 @@
 <?php
-require_once '../../db.php';
 session_start();
+require_once '../../db.php';
+header('Content-Type: application/json');
+
 
 if (empty($_SESSION['user'])) {
-    exit('mutqn argelvac e');
+     echo json_encode(['status' => 'error', 'message' => 'Entry prohibited']);
+    exit;
 }
 
 $userId = (int)$_SESSION['user']['id'];
@@ -13,7 +16,8 @@ $surname = trim($_POST['surname'] ?? '');
 $phone = trim($_POST['phone'] ?? '');
 
 if (empty($name) || empty($surname) || empty($phone)) {
-    exit('Lracreq dashty');
+    echo json_encode(['status' => 'error', 'message' => 'Fill in the field.']);
+    exit;
 }
 
 
@@ -23,13 +27,15 @@ if (!empty($_FILES['image']['name'])) {
     $file =$_FILES['image'];
 
     if ($file['size'] > 2 * 1024 * 1024) {
-        die('File too big (max. 2 MB)');
+       echo json_encode(['status' => 'error', 'message' => 'File too big (max. 2 MB)']);
+exit;
     }
 
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));$allowedExt = ['jpg', 'jpeg', 'png'];
 
     if (!in_array($ext,$allowedExt)) {
-        die('You can only upload images. (jpg, jpeg, png)');
+        echo json_encode(['status' => 'error', 'message' => 'You can only upload images. (jpg, jpeg, png)']);
+exit;
     }
 
     $avatarName = uniqid() . '.' .$ext;
@@ -50,5 +56,5 @@ $_SESSION['user']['surname'] =$surname;
 $_SESSION['user']['phone'] =$phone;
 $_SESSION['user']['avatar'] =$avatarName;
 
-header('Location: ../../views/users/profile.php');
+echo json_encode(['status' => 'success', 'redirect' => '../../views/users/profile.php']);
 exit;

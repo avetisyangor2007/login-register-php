@@ -9,7 +9,9 @@ $password = $_POST['password'] ?? '';
 
 if (empty($name) || empty($surname) || empty($phone) || empty($email) || empty($password) )
     {
-    exit('Lracreq dashty');
+    
+    echo json_encode(['status' => 'error', 'message' => 'Fill in the field.']);
+    exit;
 }
 
 $name = mysqli_real_escape_string($db, $name);
@@ -19,12 +21,14 @@ $email = mysqli_real_escape_string($db, $email);
 
 $checkEmail = mysqli_query($db, "SELECT id FROM users WHERE email = '$email'");
 if (mysqli_num_rows($checkEmail) > 0 ) {
-    exit('Ayspisi email arden goyutyun uni');
+    echo json_encode(['status' => 'error', 'message' => 'An email address like that already exists.']);
+    exit;
 }
 
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 $data = mysqli_query($db, "INSERT INTO users (`name`,`surname`,`phone`,`email`,`password`) VALUES('$name', '$surname', '$phone', '$email', '$hashedPassword')");
 
-header('Location:../../views/users/login.php');
+
+echo json_encode(['status' => 'success', 'redirect' => '../../views/users/login.php']);
 exit;

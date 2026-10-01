@@ -1,6 +1,6 @@
 <h2>Registration</h2>
 
-<form action="../../actions/users/registration.php" method ="post">
+<form id = "regForm">
     <label>Name:</label><br>
     <input type="text" name="name" required><br><br>
 
@@ -18,3 +18,7 @@
 
     <button type="submit">Register</button>
 </form>
+
+<div id = "errorMessage" style="color: red;"></div>
+
+<script src="../../js/registration.js"></script>
